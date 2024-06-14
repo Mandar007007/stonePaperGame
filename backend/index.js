@@ -13,7 +13,8 @@ app.use(cors({
   origin: '*', // Allow all origins
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
-  credentials: true // Allow credentials (cookies, headers)
+  credentials: true,
+  path:"/socket.io"
 }));
 
 const io = socketIo(http, {
