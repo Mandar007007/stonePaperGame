@@ -9,7 +9,7 @@ const server = http.createServer(app);
 
 // Enable CORS for all origins
 app.use(cors({
-  origin: '*',
+  origin: 'https://stone-paper-game-19o2.vercel.app/',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
   credentials: true
@@ -17,7 +17,7 @@ app.use(cors({
 
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: 'https://stone-paper-game-19o2.vercel.app/',
     methods: ['GET', 'POST'],
     credentials: true
   },
