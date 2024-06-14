@@ -38,6 +38,10 @@ io.on('connection', (socket) => {
       choice: ''
     });
     io.to(roomId).emit('roomCreated', { roomId, user: data.user });
+
+    socket.on('error', (error) => {
+        console.error(`Socket ${socket.id} error: ${error}`);
+      });
   });
 
   socket.on('joinRoom', (data) => {
