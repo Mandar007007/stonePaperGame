@@ -6,11 +6,17 @@ const cors = require('cors');
 
 const rooms = []; // Initialize rooms array
 
-app.use(cors());
+// Enable CORS for all origins
+app.use(cors({
+    origin: '*', // Allow all origins
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+}));
 
 const io = require('socket.io')(http, {
     cors: {
-        origin: "*"
+        origin: "*", // Allow all origins
+        methods: ["GET", "POST"]
     }
 });
 
@@ -41,14 +47,13 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('userChoise', (data) => {
+    socket.on('userChoice', (data) => {
         let room = rooms.find(room => room.id === data.roomId);
         if (room) {
             let user = room.users.find(user => user.id === socket.id);
 
             if (user) {
                 if (room.choice !== '') {
-                    console.log('Room already has a choice:', room);
                     if (data.choice === 'rock' && room.choice === 'paper') {
                         socket.emit('roundLose');
                         socket.to(data.roomId).emit('roundWin');
@@ -75,11 +80,8 @@ io.on('connection', (socket) => {
                 } else {
                     room.choice = data.choice;
                     user.choice = data.choice; 
-                    console.log('Updated room:', room);
-                    // socket.emit('roundWin');
                 }
             } else {
-                
                 socket.emit('error', { message: 'User not found in room' });
             }
         } else {
@@ -89,15 +91,15 @@ io.on('connection', (socket) => {
 
     socket.on('winner', (data) => {
         socket.emit('winnerConfirmed', { message: "Finally! won this match" });
-        socket.to(data.roomId).emit('looserConfirmed',{message:"Better Luck Next Time"})
+        socket.to(data.roomId).emit('looserConfirmed', { message: "Better Luck Next Time" });
     });
 });
 
 app.get('/', (req, res) => {
     res.json({
         message: 'Welcome'
-    })
-})
+    });
+});
 
 http.listen(process.env.PORT, () => {
     console.log(`Server listening on ${process.env.PORT}`);
