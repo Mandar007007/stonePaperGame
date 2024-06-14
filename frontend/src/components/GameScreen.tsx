@@ -9,12 +9,12 @@ const GameScreen = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        socket.on('roundWin', (data) => {
+        socket.on('roundWin', () => {
             setUserPoints(prevPoints => Math.min(prevPoints + 1, 3));
             setHasChoosen(false); // Reset choice for the next round
         });
 
-        socket.on('roundLose', (data) => {
+        socket.on('roundLose', () => {
             setHasChoosen(false); // Reset choice for the next round
         });
 
@@ -42,7 +42,7 @@ const GameScreen = () => {
         }
     }, [userPoints, roomId]);
 
-    const handleChoice = (choice) => {
+    const handleChoice = (choice:string) => {
         if (!hasChoosen) {
             console.log(`User chose: ${choice}`);
             setHasChoosen(true);

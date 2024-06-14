@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
 
-const URL = 'http://localhost:4000';
+const URL = `${window.location.protocol}`;
 
 export const socket = io(URL);

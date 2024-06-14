@@ -1,7 +1,4 @@
-import { useEffect} from 'react'
-// import './App.css'
-import { socket } from './socket'
-import { BrowserRouter as Router,Route,Routes, useNavigate } from 'react-router-dom'
+import { BrowserRouter as Router,Route,Routes } from 'react-router-dom'
 import Home from './components/Home'
 import LoadScreen from './components/LoadScreen';
 import GameScreen from './components/GameScreen';
