@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
 
-const URL = `stone-paper-game-dusky.vercel.app`;
+const URL = `https://stone-paper-game-ten.vercel.app`;
 
 export const socket = io(URL);
