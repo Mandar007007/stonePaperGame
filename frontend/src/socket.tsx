@@ -5,7 +5,7 @@ const URL = 'https://stone-paper-game-ten.vercel.app';
 
 // Configuration object for the socket connection
 const options = {
-  transports: ['websocket', 'polling'], // Specify the transport methods
+  transports: ['websocket'], // Specify the transport methods
   withCredentials: true, // If you need to send cookies or auth headers
 };
 
