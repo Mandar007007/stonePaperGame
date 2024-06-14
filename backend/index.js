@@ -1,29 +1,30 @@
 const express = require('express');
-require('dotenv').config({ path: './config/confid.env' });
-const app = express();
-const http = require('http').Server(app);
+const http = require('http');
+const { Server } = require('socket.io');
 const cors = require('cors');
-const socketIo = require('socket.io');
+require('dotenv').config();
 
-// Initialize rooms array
-const rooms = [];
+const app = express();
+const server = http.createServer(app);
 
 // Enable CORS for all origins
 app.use(cors({
-  origin: '*', // Allow all origins
+  origin: '*',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
-  credentials: true,
-  path:"/socket.io"
+  credentials: true
 }));
 
-const io = socketIo(http, {
+const io = new Server(server, {
   cors: {
-    origin: '*', // Allow all origins
+    origin: '*',
     methods: ['GET', 'POST'],
-    credentials: true // Allow credentials (cookies, headers)
-  }
+    credentials: true
+  },
+  transports: ['websocket', 'polling']
 });
+
+const rooms = [];
 
 io.on('connection', (socket) => {
   console.log('New connection: ', socket.id);
@@ -47,7 +48,6 @@ io.on('connection', (socket) => {
       room.users.push({ id: socket.id, choice: '' });
       io.to(data.roomId).emit('connected');
     } else {
-      // Handle case where room is not found
       socket.emit('error', { message: 'Room not found' });
     }
   });
@@ -106,6 +106,7 @@ app.get('/', (req, res) => {
   });
 });
 
-http.listen(process.env.PORT, () => {
-  console.log(`Server listening on ${process.env.PORT}`);
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server listening on ${PORT}`);
 });
