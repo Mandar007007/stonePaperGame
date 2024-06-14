@@ -94,6 +94,12 @@ io.on('connection', (socket) => {
     });
 });
 
+app.get('/' ,(req,res) => {
+    res.json({
+        message:"Welcome"
+    })
+})
+
 http.listen(process.env.PORT, () => {
     console.log(`Server listening on ${process.env.PORT}`);
 });
