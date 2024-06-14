@@ -10,7 +10,7 @@ app.use(cors());
 
 const io = require('socket.io')(http, {
     cors: {
-        origin: "http://localhost:5173"
+        origin: "https://stone-paper-game-bds8.vercel.app/"
     }
 });
 
