@@ -11,7 +11,7 @@ app.use(cors());
 
 const io = require('socket.io')(http, {
     cors: {
-        origin: "http://localhost:5173"
+        origin: "*"
     }
 });
 
@@ -96,7 +96,7 @@ io.on('connection', (socket) => {
 
 app.get('/' ,(req,res) => {
     res.json({
-        message:"Welcome"
+        message:"Welcome Api Is Running"
     })
 })
 
