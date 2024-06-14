@@ -3,7 +3,7 @@ import { socket } from "../socket";
 import { useNavigate } from "react-router-dom";
 
 const GameScreen = () => {
-    const [userPoints, setUserPoints] = useState(0);
+    const [userPoints, setUserPoints] = useState(1);
     const [hasChoosen, setHasChoosen] = useState(false);
     const roomId = localStorage.getItem('roomId');
     const navigate = useNavigate();
