@@ -3,22 +3,21 @@ require('dotenv').config({ path: './config/confid.env' });
 const app = express();
 const http = require('http').Server(app);
 const cors = require('cors');
-const path = require('path');
 
-const rooms = []; // Initialize rooms array
+const rooms = [];
 
 app.use(cors({
-    origin: "*", // Add your frontend URLs here
+    origin: "*",
     methods: ["GET", "POST"],
     credentials: true
-  }));
+}));
 
 const io = require('socket.io')(http, {
     cors: {
-        origin:"*", // Add your frontend URLs here
+        origin: "*",
         methods: ["GET", "POST"],
         credentials: true
-      }
+    }
 });
 
 io.on('connection', (socket) => {
@@ -29,8 +28,7 @@ io.on('connection', (socket) => {
         socket.join(roomId);
         rooms.push({
             id: roomId,
-            users: [{ id: socket.id, choice: '' }],
-            choice: ''
+            users: [{ id: socket.id, choice: '' }]
         });
         io.to(roomId).emit('roomCreated', { roomId, user: data.user });
     });
@@ -43,7 +41,6 @@ io.on('connection', (socket) => {
             room.users.push({ id: socket.id, choice: '' });
             io.to(data.roomId).emit('connected');
         } else {
-            // Handle case where room is not found
             socket.emit('error', { message: 'Room not found' });
         }
     });
@@ -54,39 +51,28 @@ io.on('connection', (socket) => {
             let user = room.users.find(user => user.id === socket.id);
 
             if (user) {
-                if (room.choice !== '') {
-                    console.log('Room already has a choice:', room);
-                    if (data.choice === 'rock' && room.choice === 'paper') {
-                        socket.emit('roundLose');
-                        socket.to(data.roomId).emit('roundWin');
-                    } else if (data.choice === 'paper' && room.choice === 'rock') {
-                        socket.emit('roundWin');
-                        socket.to(data.roomId).emit('roundLose');
-                    } else if (data.choice === 'scissors' && room.choice === 'paper') {
-                        socket.emit('roundWin');
-                        socket.to(data.roomId).emit('roundLose');
-                    } else if (data.choice === 'paper' && room.choice === 'scissors') {
-                        socket.emit('roundLose');
-                        socket.to(data.roomId).emit('roundWin');
-                    } else if (data.choice === 'rock' && room.choice === 'scissors') {
-                        socket.emit('roundWin');
-                        socket.to(data.roomId).emit('roundLose');
-                    } else if (data.choice === 'scissors' && room.choice === 'rock') {
-                        socket.emit('roundLose');
-                        socket.to(data.roomId).emit('roundWin');
-                    } else {
+                user.choice = data.choice;
+
+                let allUsersMadeChoice = room.users.every(user => user.choice !== '');
+                if (allUsersMadeChoice) {
+                    let choices = room.users.map(user => user.choice);
+                    let winner = determineWinner(choices);
+
+                    if (winner === 'draw') {
                         io.to(data.roomId).emit('draw');
+                    } else {
+                        room.users.forEach(user => {
+                            if (user.choice === winner) {
+                                io.to(user.id).emit('roundWin');
+                            } else {
+                                io.to(user.id).emit('roundLose');
+                            }
+                        });
                     }
-                    room.choice = '';
-                    user.choice = '';
-                } else {
-                    room.choice = data.choice;
-                    user.choice = data.choice; 
-                    console.log('Updated room:', room);
-                    // socket.emit('roundWin');
+
+                    room.users.forEach(user => user.choice = '');
                 }
             } else {
-
                 socket.emit('error', { message: 'User not found in room' });
             }
         } else {
@@ -96,16 +82,39 @@ io.on('connection', (socket) => {
 
     socket.on('winner', (data) => {
         socket.emit('winnerConfirmed', { message: "Finally! won this match" });
-        socket.to(data.roomId).emit('looserConfirmed',{message:"Better Luck Next Time"})
+        socket.to(data.roomId).emit('looserConfirmed', { message: "Better Luck Next Time" });
     });
 });
 
-app.get('/' ,(req,res) => {
+app.get('/', (req, res) => {
     res.json({
-        message:"Welcome Api Is Running fine"
-    })
-})
+        message: "Welcome Api Is Running fine"
+    });
+});
 
 http.listen(process.env.PORT, () => {
     console.log(`Server listening on ${process.env.PORT}`);
 });
+
+function determineWinner(choices) {
+    const uniqueChoices = [...new Set(choices)];
+    if (uniqueChoices.length === 1) return 'draw';
+
+    if (uniqueChoices.includes('rock') && uniqueChoices.includes('paper') && uniqueChoices.includes('scissors')) {
+        return 'draw';
+    }
+
+    if (uniqueChoices.includes('rock') && uniqueChoices.includes('paper')) {
+        return 'paper';
+    }
+
+    if (uniqueChoices.includes('rock') && uniqueChoices.includes('scissors')) {
+        return 'rock';
+    }
+
+    if (uniqueChoices.includes('paper') && uniqueChoices.includes('scissors')) {
+        return 'scissors';
+    }
+
+    return 'draw';
+}
