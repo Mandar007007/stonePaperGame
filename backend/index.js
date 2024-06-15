@@ -102,7 +102,7 @@ io.on('connection', (socket) => {
 
 app.get('/' ,(req,res) => {
     res.json({
-        message:"Welcome Api Is Running"
+        message:"Welcome Api Is Running fine"
     })
 })
 
