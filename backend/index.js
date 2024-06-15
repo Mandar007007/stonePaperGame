@@ -31,6 +31,7 @@ io.on('connection', (socket) => {
             users: [{ id: socket.id, choice: '' }]
         });
         io.to(roomId).emit('roomCreated', { roomId, user: data.user });
+        console.log(`Room created with ID: ${roomId}, by user: ${data.user}`);
     });
 
     socket.on('joinRoom', (data) => {
@@ -40,8 +41,10 @@ io.on('connection', (socket) => {
         if (room) {
             room.users.push({ id: socket.id, choice: '' });
             io.to(data.roomId).emit('connected');
+            console.log(`User ${socket.id} joined room: ${data.roomId}`);
         } else {
             socket.emit('error', { message: 'Room not found' });
+            console.log(`Room not found: ${data.roomId}`);
         }
     });
 
@@ -52,6 +55,7 @@ io.on('connection', (socket) => {
 
             if (user) {
                 user.choice = data.choice;
+                console.log(`User ${socket.id} made a choice: ${data.choice} in room: ${data.roomId}`);
 
                 let allUsersMadeChoice = room.users.every(user => user.choice !== '');
                 if (allUsersMadeChoice) {
@@ -60,12 +64,15 @@ io.on('connection', (socket) => {
 
                     if (winner === 'draw') {
                         io.to(data.roomId).emit('draw');
+                        console.log(`Draw in room: ${data.roomId}`);
                     } else {
                         room.users.forEach(user => {
                             if (user.choice === winner) {
                                 io.to(user.id).emit('roundWin');
+                                console.log(`User ${user.id} won in room: ${data.roomId}`);
                             } else {
                                 io.to(user.id).emit('roundLose');
+                                console.log(`User ${user.id} lost in room: ${data.roomId}`);
                             }
                         });
                     }
@@ -74,9 +81,11 @@ io.on('connection', (socket) => {
                 }
             } else {
                 socket.emit('error', { message: 'User not found in room' });
+                console.log(`User not found in room: ${data.roomId}`);
             }
         } else {
             socket.emit('error', { message: 'Room not found' });
+            console.log(`Room not found: ${data.roomId}`);
         }
     });
 
@@ -88,7 +97,7 @@ io.on('connection', (socket) => {
 
 app.get('/', (req, res) => {
     res.json({
-        message: "Welcome Api Is Running fineeee"
+        message: "Welcome Api Is Running fineii"
     });
 });
 
