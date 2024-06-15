@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { socket } from "./socket";
 import { useNavigate } from "react-router-dom";
+import { socket } from "../socket";
 
 const GameScreen = () => {
     const [userPoints, setUserPoints] = useState(0);
