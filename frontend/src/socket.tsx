@@ -6,7 +6,7 @@ const URL = "https://stonepapergameback.onrender.com"
 
 // Configuration object for the socket connection
 const options = {
-  transports: ['websocket', 'polling'], // Specify the transport methods
+  // transports: ['websocket', 'polling'], // Specify the transport methods
   withCredentials: true, // If you need to send cookies or auth headers
 };
 
