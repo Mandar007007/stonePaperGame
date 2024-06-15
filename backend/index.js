@@ -7,12 +7,18 @@ const path = require('path');
 
 const rooms = []; // Initialize rooms array
 
-app.use(cors());
+app.use(cors({
+    origin: "*", // Add your frontend URLs here
+    methods: ["GET", "POST"],
+    credentials: true
+  }));
 
 const io = require('socket.io')(http, {
     cors: {
-        origin: "*"
-    }
+        origin:"*", // Add your frontend URLs here
+        methods: ["GET", "POST"],
+        credentials: true
+      }
 });
 
 io.on('connection', (socket) => {
