@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
-import { socket } from "../socket";
+import { socket } from "./socket";
 import { useNavigate } from "react-router-dom";
 
 const GameScreen = () => {
-    const [userPoints, setUserPoints] = useState(1);
-    const [hasChoosen, setHasChoosen] = useState(false);
+    const [userPoints, setUserPoints] = useState(0);
+    const [hasChosen, setHasChosen] = useState(false);
     const roomId = localStorage.getItem('roomId');
     const navigate = useNavigate();
 
     useEffect(() => {
         socket.on('roundWin', () => {
             setUserPoints(prevPoints => Math.min(prevPoints + 1, 3));
-            setHasChoosen(false); // Reset choice for the next round
+            setHasChosen(false); // Reset choice for the next round
         });
 
         socket.on('roundLose', () => {
-            setHasChoosen(false); // Reset choice for the next round
+            setHasChosen(false); // Reset choice for the next round
         });
 
         socket.on('winnerConfirmed', (data) => {
@@ -43,10 +43,10 @@ const GameScreen = () => {
     }, [userPoints, roomId]);
 
     const handleChoice = (choice:string) => {
-        if (!hasChoosen) {
+        if (!hasChosen) {
             console.log(`User chose: ${choice}`);
-            setHasChoosen(true);
-            socket.emit('userChoise', { choice, roomId });
+            setHasChosen(true);
+            socket.emit('userChoice', { choice, roomId });
         }
     };
 
@@ -55,19 +55,19 @@ const GameScreen = () => {
             <h1 className="text-4xl text-white mb-8">Rock Paper Scissors</h1>
             <div className="flex space-x-4 mb-8">
                 <div 
-                    className={`w-24 h-24 bg-white flex items-center justify-center rounded-full shadow-lg cursor-pointer ${hasChoosen ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-200 hover:shadow-[0_0_15px_rgba(255,255,255,0.8)] transition-all duration-300'}`}
+                    className={`w-24 h-24 bg-white flex items-center justify-center rounded-full shadow-lg cursor-pointer ${hasChosen ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-200 hover:shadow-[0_0_15px_rgba(255,255,255,0.8)] transition-all duration-300'}`}
                     onClick={() => handleChoice('rock')}
                 >
                     <img src="rock.png" alt="Rock" className="w-12 h-12" />
                 </div>
                 <div 
-                    className={`w-24 h-24 bg-white flex items-center justify-center rounded-full shadow-lg cursor-pointer ${hasChoosen ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-200 hover:shadow-[0_0_15px_rgba(255,255,255,0.8)] transition-all duration-300'}`}
+                    className={`w-24 h-24 bg-white flex items-center justify-center rounded-full shadow-lg cursor-pointer ${hasChosen ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-200 hover:shadow-[0_0_15px_rgba(255,255,255,0.8)] transition-all duration-300'}`}
                     onClick={() => handleChoice('paper')}
                 >
                     <img src="paper.png" alt="Paper" className="w-12 h-12" />
                 </div>
                 <div 
-                    className={`w-24 h-24 bg-white flex items-center justify-center rounded-full shadow-lg cursor-pointer ${hasChoosen ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-200 hover:shadow-[0_0_15px_rgba(255,255,255,0.8)] transition-all duration-300'}`}
+                    className={`w-24 h-24 bg-white flex items-center justify-center rounded-full shadow-lg cursor-pointer ${hasChosen ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-200 hover:shadow-[0_0_15px_rgba(255,255,255,0.8)] transition-all duration-300'}`}
                     onClick={() => handleChoice('scissors')}
                 >
                     <img src="scissors.png" alt="Scissors" className="w-12 h-12" />
