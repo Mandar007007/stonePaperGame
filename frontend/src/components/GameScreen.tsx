@@ -10,6 +10,7 @@ const GameScreen = () => {
 
     useEffect(() => {
         socket.on('roundWin', () => {
+            alert(1)
             setUserPoints(prevPoints => Math.min(prevPoints + 1, 3));
             setHasChosen(false); // Reset choice for the next round
         });
