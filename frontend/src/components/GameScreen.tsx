@@ -53,7 +53,7 @@ const GameScreen = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-gray-800 to-black">
-            <h1 className="text-4xl text-white mb-8">Rock Paper Scissors</h1>
+            <h1 className="text-4xl text-white mb-8">Rock Paper Scissors--</h1>
             <div className="flex space-x-4 mb-8">
                 <div 
                     className={`w-24 h-24 bg-white flex items-center justify-center rounded-full shadow-lg cursor-pointer ${hasChosen ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-200 hover:shadow-[0_0_15px_rgba(255,255,255,0.8)] transition-all duration-300'}`}
