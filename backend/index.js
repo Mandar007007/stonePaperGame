@@ -10,7 +10,7 @@ app.use(cors());
 
 const io = require('socket.io')(http, {
     cors: {
-        origin: "http://localhost:5173"
+        origin: "*"
     }
 });
 
@@ -43,6 +43,7 @@ io.on('connection', (socket) => {
 
     socket.on('userChoise', (data) => {
         let room = rooms.find(room => room.id === data.roomId);
+        console.log(room)
         if (room) {
             let user = room.users.find(user => user.id === socket.id);
 

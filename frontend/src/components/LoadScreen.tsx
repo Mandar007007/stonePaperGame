@@ -24,7 +24,7 @@ const LoadScreen = () => {
 
         socket.on('roomCreated', handleRoomCreated);
         socket.on('connected',handleConnected);
-        
+
         return () => {
             socket.off('roomCreated', handleRoomCreated);
             socket.off('connected', handleConnected);
@@ -39,7 +39,7 @@ const LoadScreen = () => {
         <div className="flex items-center justify-center min-h-screen bg-black relative">
             {/* Loading Spinner */}
             <div className="border-t-4 border-white border-solid rounded-full w-16 h-16 animate-spin"></div>
-            
+
             {/* Room ID and Copy Icon */}
             {roomId && (
                 <div className="absolute top-4 left-4 text-white">
@@ -51,7 +51,7 @@ const LoadScreen = () => {
                     </div>
                 </div>
             )}
-            
+
             {/* Usernames in the top right corner */}
             <div className="absolute top-4 right-4 text-white text-right">
                 <div className="font-bold mb-2">Connected Users:</div>

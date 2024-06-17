@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 
 // URL of your backend server
-// const URL = 'https://stone-paper-game-ten.vercel.app';
+// const URL = 'http://localhost:4000';
 const URL = "https://stonepapergameback.onrender.com"
 
 // Configuration object for the socket connection
