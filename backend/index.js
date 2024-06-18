@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
     socket.on('joinRoom', (data) => {
         socket.join(data.roomId);
         let room = rooms.find(room => room.id === data.roomId);
-
+        
         if (room) {
             room.users.push({ id: socket.id, choice: '' });
             io.to(data.roomId).emit('connected');

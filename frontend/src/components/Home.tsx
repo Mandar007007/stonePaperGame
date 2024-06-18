@@ -23,6 +23,7 @@ const Home = () => {
 
     const handleJoinRoom = async () => {
         try {
+            localStorage.setItem("roomId", roomId);
             socket.emit("joinRoom", { roomId, user: {
               userName: "User2",
               imageUrl: "https://w7.pngwing.com/pngs/247/564/png-transparent-computer-icons-user-profile-user-avatar-blue-heroes-electric-blue.png"
