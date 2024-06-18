@@ -28,6 +28,10 @@ const GameScreen = () => {
             navigate("/");
         });
 
+        socket.on("draw",() => {
+            setHasChoosen(false); 
+        })
+
         return () => {
             socket.off('roundWin');
             socket.off('roundLose');
