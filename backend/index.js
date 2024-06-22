@@ -23,7 +23,8 @@ io.on('connection', (socket) => {
         rooms.push({
             id: roomId,
             users: [{ id: socket.id, choice: '' }],
-            choice: ''
+            choice: '',
+            type:'2p'
         });
         io.to(roomId).emit('roomCreated', { roomId, user: data.user });
     });
@@ -34,7 +35,7 @@ io.on('connection', (socket) => {
         
         if (room) {
             room.users.push({ id: socket.id, choice: '' });
-            io.to(data.roomId).emit('connected');
+            io.to(data.roomId).emit('connected',{roomId: data.roomId});
         } else {
             // Handle case where room is not found
             socket.emit('error', { message: 'Room not found' });
@@ -92,6 +93,30 @@ io.on('connection', (socket) => {
         socket.emit('winnerConfirmed', { message: "Finally! won this match" });
         socket.to(data.roomId).emit('looserConfirmed',{message:"Better Luck Next Time"})
     });
+
+    socket.on('playOnline',(data) => {
+        const room = rooms.find(room => room.type != '2p' && room.users.length == 1)
+        if(room)
+            {
+                room.users.push({id:socket.id,choise:''})
+                socket.join(room.id)
+                console.log("existed room ",room)
+                io.to(room.id).emit('connected',{roomId:room.id});
+            }
+            else{
+                const roomId = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+                console.log(roomId);
+            socket.join(roomId);
+            rooms.push({
+                id: roomId,
+                users: [{ id: socket.id, choice: '' }],
+                choice: '',
+                type:'om'
+            });
+            io.to(roomId).emit('roomCreated', { roomId,user:{userName:"User2",imageUrl:"https://w7.pngwing.com/pngs/247/564/png-transparent-computer-icons-user-profile-user-avatar-blue-heroes-electric-blue.png"} });
+
+        }
+    })
 });
 
 app.get("/",(req,res) => {

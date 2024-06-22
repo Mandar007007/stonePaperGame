@@ -24,26 +24,40 @@ const Home = () => {
     const handleJoinRoom = async () => {
         try {
             localStorage.setItem("roomId", roomId);
-            socket.emit("joinRoom", { roomId, user: {
-              userName: "User2",
-              imageUrl: "https://w7.pngwing.com/pngs/247/564/png-transparent-computer-icons-user-profile-user-avatar-blue-heroes-electric-blue.png"
-          }});
+            socket.emit("joinRoom", {
+                roomId, user: {
+                    userName: "User2",
+                    imageUrl: "https://w7.pngwing.com/pngs/247/564/png-transparent-computer-icons-user-profile-user-avatar-blue-heroes-electric-blue.png"
+                }
+            });
             navigate('/loading');
         } catch (err) {
             console.log("Join Room error: " + err);
         }
     };
 
+    const handleOnlineMultiplayer = async () => {
+        try{
+
+            socket.emit('playOnline')
+            navigate('/loading');
+
+        }catch(err)
+        {
+            console.log(err)
+        }
+    }
+
     return (
         <div className="flex min-h-screen justify-center items-center flex-col bg-black">
-            <button 
-                onClick={handleCreateRoom} 
+            <button
+                onClick={handleCreateRoom}
                 className="w-40 mb-4 px-4 py-2 text-white border border-white bg-transparent hover:bg-white hover:text-black hover:shadow-[0_0_10px_white] transition-all duration-300"
             >
                 Create Room
             </button>
-            <button 
-                onClick={() => setShowInput(!showInput)} 
+            <button
+                onClick={() => setShowInput(!showInput)}
                 className="w-40 mb-4 px-4 py-2 text-white border border-white bg-transparent hover:bg-white hover:text-black hover:shadow-[0_0_10px_white] transition-all duration-300"
             >
                 Join Room
@@ -57,17 +71,18 @@ const Home = () => {
                         onChange={(e) => setRoomId(e.target.value)}
                         className="mb-4 px-4 py-2 border border-white bg-transparent text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white"
                     />
-                    <button 
-                        onClick={handleJoinRoom} 
-                        className="px-4 py-2 text-white border border-white bg-transparent hover:bg-white hover:text-black hover:shadow-[0_0_10px_white] transition-all duration-300"
+                    <button
+                        onClick={handleJoinRoom}
+                        className="px-4 py-2 mb-4 text-white border border-white bg-transparent hover:bg-white hover:text-black hover:shadow-[0_0_10px_white] transition-all duration-300"
                     >
                         Join
                     </button>
                 </div>
             )}
-                        <button 
-                
+            <button
+
                 className="w-40 px-4 py-2 text-white border border-white bg-transparent hover:bg-white hover:text-black hover:shadow-[0_0_10px_white] transition-all duration-300"
+                onClick={handleOnlineMultiplayer}
             >
                 Play Online
             </button>

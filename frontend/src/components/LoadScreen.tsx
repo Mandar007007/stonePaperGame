@@ -18,7 +18,8 @@ const LoadScreen = () => {
             localStorage.setItem('roomId', data.roomId)
         };
 
-        const handleConnected = () => {
+        const handleConnected = (data) => {
+            localStorage.setItem("roomId", data.roomId);
           navigate('/game')
         }
 
