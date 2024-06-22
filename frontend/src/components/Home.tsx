@@ -65,6 +65,12 @@ const Home = () => {
                     </button>
                 </div>
             )}
+                        <button 
+                
+                className="w-40 px-4 py-2 text-white border border-white bg-transparent hover:bg-white hover:text-black hover:shadow-[0_0_10px_white] transition-all duration-300"
+            >
+                Play Online
+            </button>
         </div>
     );
 };
